@@ -1,0 +1,1 @@
+cmd_/home/pi/exam/dd_exam/ques_2/driver.ko := ld -r -EL --build-id=sha1  -T scripts/module.lds -o /home/pi/exam/dd_exam/ques_2/driver.ko /home/pi/exam/dd_exam/ques_2/driver.o /home/pi/exam/dd_exam/ques_2/driver.mod.o;  true

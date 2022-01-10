@@ -96,7 +96,7 @@ ssize_t NEW_read(struct file *filp,char __user *ubuff,size_t count,loff_t *offp)
 {
     unsigned long result;
     ssize_t retval;
-    result=copy_to_user((char*)ubuff,(char*)data->kbuff,sizeof(data->kbuff));
+    result=copy_to_user((char*)ubuff,(char *)data->kbuff,sizeof(data->kbuff));
     data->size = count;
     data->r_w = 0;
     if(result==0)
@@ -124,9 +124,9 @@ ssize_t NEW_write(struct file *filp,const char __user *ubuff,size_t count,loff_t
 {
     unsigned long result;
     ssize_t retval;
-    result=copy_from_user((char*)data->kbuff,(char*)ubuff,count);
-    data->size = count;
-    data->r_w = 1;
+    char l_kbuff[180];
+    result=copy_from_user((char *)l_kbuff,(char *)ubuff,count);
+    strcpy(data->kbuff,l_kbuff);
     if(result==0)
     {
         printk(KERN_ALERT "\n MESSAGE FROM USER..\n...%s....\n",ubuff);
