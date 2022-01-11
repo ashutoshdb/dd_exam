@@ -1,8 +1,8 @@
-cmd_/home/pi/exam/dd_exam/ques_1/driver.o := gcc -Wp,-MMD,/home/pi/exam/dd_exam/ques_1/.driver.o.d -nostdinc -isystem /usr/lib/gcc/arm-linux-gnueabihf/10/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Wno-format-security -std=gnu89 -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mfpu=vfp -marm -Wa,-mno-warn-deprecated -D__LINUX_ARM_ARCH__=7 -march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-address-of-packed-member -O2 -fno-allow-store-data-races -Wframe-larger-than=1024 -fstack-protector-strong -Wimplicit-fallthrough -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-stringop-truncation -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized -fno-strict-overflow -fno-stack-check -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wno-packed-not-aligned  -DMODULE  -DKBUILD_BASENAME='"driver"' -DKBUILD_MODNAME='"driver"' -c -o /home/pi/exam/dd_exam/ques_1/driver.o /home/pi/exam/dd_exam/ques_1/driver.c
+cmd_/home/pi/dd_exam/ques_1/driver.o := gcc -Wp,-MMD,/home/pi/dd_exam/ques_1/.driver.o.d -nostdinc -isystem /usr/lib/gcc/arm-linux-gnueabihf/10/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Wno-format-security -std=gnu89 -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mfpu=vfp -marm -Wa,-mno-warn-deprecated -D__LINUX_ARM_ARCH__=7 -march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-address-of-packed-member -O2 -fno-allow-store-data-races -Wframe-larger-than=1024 -fstack-protector-strong -Wimplicit-fallthrough -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-stringop-truncation -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized -fno-strict-overflow -fno-stack-check -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wno-packed-not-aligned  -DMODULE  -DKBUILD_BASENAME='"driver"' -DKBUILD_MODNAME='"driver"' -c -o /home/pi/dd_exam/ques_1/driver.o /home/pi/dd_exam/ques_1/driver.c
 
-source_/home/pi/exam/dd_exam/ques_1/driver.o := /home/pi/exam/dd_exam/ques_1/driver.c
+source_/home/pi/dd_exam/ques_1/driver.o := /home/pi/dd_exam/ques_1/driver.c
 
-deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
+deps_/home/pi/dd_exam/ques_1/driver.o := \
   include/linux/kconfig.h \
     $(wildcard include/config/cc/version/text.h) \
     $(wildcard include/config/cpu/big/endian.h) \
@@ -18,30 +18,18 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
     $(wildcard include/config/retpoline.h) \
     $(wildcard include/config/arch/use/builtin/bswap.h) \
     $(wildcard include/config/kcov.h) \
-  include/linux/module.h \
-    $(wildcard include/config/modules.h) \
-    $(wildcard include/config/sysfs.h) \
-    $(wildcard include/config/modules/tree/lookup.h) \
-    $(wildcard include/config/livepatch.h) \
-    $(wildcard include/config/unused/symbols.h) \
-    $(wildcard include/config/module/sig.h) \
-    $(wildcard include/config/generic/bug.h) \
-    $(wildcard include/config/kallsyms.h) \
+  include/linux/kernel.h \
+    $(wildcard include/config/preempt/voluntary.h) \
+    $(wildcard include/config/debug/atomic/sleep.h) \
+    $(wildcard include/config/preempt/rt.h) \
+    $(wildcard include/config/mmu.h) \
+    $(wildcard include/config/prove/locking.h) \
     $(wildcard include/config/smp.h) \
-    $(wildcard include/config/tracepoints.h) \
-    $(wildcard include/config/tree/srcu.h) \
-    $(wildcard include/config/bpf/events.h) \
-    $(wildcard include/config/jump/label.h) \
+    $(wildcard include/config/panic/timeout.h) \
     $(wildcard include/config/tracing.h) \
-    $(wildcard include/config/event/tracing.h) \
     $(wildcard include/config/ftrace/mcount/record.h) \
-    $(wildcard include/config/kprobes.h) \
-    $(wildcard include/config/have/static/call/inline.h) \
-    $(wildcard include/config/module/unload.h) \
-    $(wildcard include/config/constructors.h) \
-    $(wildcard include/config/function/error/injection.h) \
-  include/linux/list.h \
-    $(wildcard include/config/debug/list.h) \
+  include/linux/limits.h \
+  include/uapi/linux/limits.h \
   include/linux/types.h \
     $(wildcard include/config/have/uid16.h) \
     $(wildcard include/config/uid16.h) \
@@ -61,21 +49,6 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
   include/linux/compiler_types.h \
   arch/arm/include/uapi/asm/posix_types.h \
   include/uapi/asm-generic/posix_types.h \
-  include/linux/poison.h \
-    $(wildcard include/config/illegal/pointer/value.h) \
-    $(wildcard include/config/page/poisoning/zero.h) \
-  include/linux/const.h \
-  include/vdso/const.h \
-  include/uapi/linux/const.h \
-  include/linux/kernel.h \
-    $(wildcard include/config/preempt/voluntary.h) \
-    $(wildcard include/config/debug/atomic/sleep.h) \
-    $(wildcard include/config/preempt/rt.h) \
-    $(wildcard include/config/mmu.h) \
-    $(wildcard include/config/prove/locking.h) \
-    $(wildcard include/config/panic/timeout.h) \
-  include/linux/limits.h \
-  include/uapi/linux/limits.h \
   include/vdso/limits.h \
   include/linux/linkage.h \
     $(wildcard include/config/arch/use/sym/annotations.h) \
@@ -84,7 +57,9 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
     $(wildcard include/config/modversions.h) \
     $(wildcard include/config/module/rel/crcs.h) \
     $(wildcard include/config/have/arch/prel32/relocations.h) \
+    $(wildcard include/config/modules.h) \
     $(wildcard include/config/trim/unused/ksyms.h) \
+    $(wildcard include/config/unused/symbols.h) \
   arch/arm/include/asm/linkage.h \
   include/linux/compiler.h \
     $(wildcard include/config/trace/branch/profiling.h) \
@@ -99,6 +74,9 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
     $(wildcard include/config/kcsan/ignore/atomics.h) \
   include/linux/bitops.h \
   include/linux/bits.h \
+  include/linux/const.h \
+  include/vdso/const.h \
+  include/uapi/linux/const.h \
   include/vdso/bits.h \
   include/linux/build_bug.h \
   arch/arm/include/asm/bitops.h \
@@ -222,6 +200,28 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
   arch/arm/include/asm/div64.h \
   arch/arm/include/asm/compiler.h \
   include/asm-generic/div64.h \
+  include/linux/module.h \
+    $(wildcard include/config/sysfs.h) \
+    $(wildcard include/config/modules/tree/lookup.h) \
+    $(wildcard include/config/livepatch.h) \
+    $(wildcard include/config/module/sig.h) \
+    $(wildcard include/config/generic/bug.h) \
+    $(wildcard include/config/kallsyms.h) \
+    $(wildcard include/config/tracepoints.h) \
+    $(wildcard include/config/tree/srcu.h) \
+    $(wildcard include/config/bpf/events.h) \
+    $(wildcard include/config/jump/label.h) \
+    $(wildcard include/config/event/tracing.h) \
+    $(wildcard include/config/kprobes.h) \
+    $(wildcard include/config/have/static/call/inline.h) \
+    $(wildcard include/config/module/unload.h) \
+    $(wildcard include/config/constructors.h) \
+    $(wildcard include/config/function/error/injection.h) \
+  include/linux/list.h \
+    $(wildcard include/config/debug/list.h) \
+  include/linux/poison.h \
+    $(wildcard include/config/illegal/pointer/value.h) \
+    $(wildcard include/config/page/poisoning/zero.h) \
   include/linux/stat.h \
   arch/arm/include/uapi/asm/stat.h \
   include/uapi/linux/stat.h \
@@ -844,8 +844,19 @@ deps_/home/pi/exam/dd_exam/ques_1/driver.o := \
     $(wildcard include/config/arm/dma/use/iommu.h) \
     $(wildcard include/config/arch/omap.h) \
   include/linux/pm_wakeup.h \
-  /home/pi/exam/dd_exam/ques_1/control.h \
+  include/linux/slab.h \
+    $(wildcard include/config/debug/slab.h) \
+    $(wildcard include/config/failslab.h) \
+    $(wildcard include/config/have/hardened/usercopy/allocator.h) \
+    $(wildcard include/config/slab.h) \
+    $(wildcard include/config/slub.h) \
+    $(wildcard include/config/slob.h) \
+  include/linux/percpu-refcount.h \
+  include/linux/kasan.h \
+    $(wildcard include/config/kasan/vmalloc.h) \
+    $(wildcard include/config/kasan/generic.h) \
+    $(wildcard include/config/kasan/inline.h) \
 
-/home/pi/exam/dd_exam/ques_1/driver.o: $(deps_/home/pi/exam/dd_exam/ques_1/driver.o)
+/home/pi/dd_exam/ques_1/driver.o: $(deps_/home/pi/dd_exam/ques_1/driver.o)
 
-$(deps_/home/pi/exam/dd_exam/ques_1/driver.o):
+$(deps_/home/pi/dd_exam/ques_1/driver.o):

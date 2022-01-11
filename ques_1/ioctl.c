@@ -1,34 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/ioctl.h>
-#include "control.h"
+#include<sys/ioctl.h>
 
+
+//IOCTL format MACRO 
+#define GETSTAT _IOWR('r','a',struct stats *)
 struct stats
- 		{
-            int size;
-            char kbuff[80];
-            int r_w;
-        };
+{
+   int size;
+   char buff[80];
+   int r_w;
+};
 
-struct stats *data;
+struct stats buff_rec;
+
 int main()
 {
+        int fd;
+        struct stats *value;
+        
+        printf("Welcome to User IOCTL program \n");
+ 
+        printf("\nOpening Driver\n");
+        fd = open("/dev/myexam", O_RDWR);
+        if(fd < 0) 
+        {
+                printf("Cannot open device file...\n");
+                return 0;
+        }
+ 
+        printf("Reading Value from Structure\n");
+        ioctl(fd, GETSTAT, (struct stats *)&buff_rec);
 
-int fd,result;
-    fd=open("/dev/IOCTL_0",O_RDWR,0777);
-    if(fd<0)
-    {
-        printf("\n ERROR IN OPENING.\n");
-        exit(1);
-    }
-
-    ioctl(fd,GETSTATS, (struct stats*)&data);
-    printf("size is : %d",data->r_w);
-    printf("size is : %d",data->size);
-    printf("size is : %s",data->kbuff);
-    close(fd);
+        printf("Size of buffer is %d\n", buff_rec.size);
+        printf("Buffer Value is %s\n", buff_rec.buff);
+        printf("Status Value of r_w is %d\n", buff_rec.r_w);
+ 
+        printf("Closing Driver\n");
+        close(fd);
 }

@@ -27,16 +27,17 @@ static const struct modversion_info ____versions[]
 __used __section("__versions") = {
 	{ 0xbd97005b, "module_layout" },
 	{ 0xf72f2e16, "cdev_del" },
+	{ 0xc65b2c7a, "device_destroy" },
 	{ 0x6091b333, "unregister_chrdev_region" },
+	{ 0xafe18e20, "class_destroy" },
+	{ 0xfada38fe, "device_create" },
+	{ 0xd9379699, "__class_create" },
 	{ 0x4a91e5dd, "cdev_add" },
-	{ 0xfdc3d1c, "cdev_alloc" },
-	{ 0x3fd78f3b, "register_chrdev_region" },
-	{ 0x8f678b07, "__stack_chk_guard" },
+	{ 0xc72c11da, "cdev_init" },
+	{ 0xe3ec2f2b, "alloc_chrdev_region" },
 	{ 0x5f754e5a, "memset" },
-	{ 0x86332725, "__stack_chk_fail" },
-	{ 0x2cfde9a2, "warn_slowpath_fmt" },
-	{ 0xe914e41e, "strcpy" },
 	{ 0xae353d77, "arm_copy_from_user" },
+	{ 0x2cfde9a2, "warn_slowpath_fmt" },
 	{ 0x51a910c0, "arm_copy_to_user" },
 	{ 0xc5850110, "printk" },
 	{ 0xb1ad28e0, "__gnu_mcount_nc" },
@@ -45,4 +46,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "0F99F6BADC218A479E635ED");
+MODULE_INFO(srcversion, "5E7D43A7D89AF4D1ABDA8A9");
