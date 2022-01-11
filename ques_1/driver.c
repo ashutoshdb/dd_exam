@@ -1,203 +1,173 @@
+#include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
-#include <linux/module.h>
 #include <linux/kdev_t.h>
+#include <linux/types.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/device.h>
-#include<linux/slab.h>                 //kmalloc()
-#include<linux/uaccess.h>              //copy_to/from_user()
+#include <linux/uaccess.h>
 #include <linux/ioctl.h>
-#define SIZE 200 
-//IOCTL format MACRO 
-#define GETSTAT _IOWR('r','a',struct stats*)
+#include "control.h"
 
-dev_t dev = 0;
-static struct class *dev_class;
-static struct cdev mycdev;
-int ret;
+
+#define NEW IOCTL_0
+struct cdev *my_cdev;
+
+//FOR DEFAULT DATA..
 struct stats
-{
-    int size;
-    char buff[SIZE];
-    int r_w;
-};
+ 		{
+            int size;
+            char buff[180];
+            int r_w;
+        };
 
-struct stats *data;
-
-struct stats buff_init={
+struct stats data={
         .buff = {"\0"},
         .size = 0,
         .r_w = 0
 };
-// Function Prototypes
-static int      __init mydriver_init(void);
-static void     __exit mydriver_exit(void);
-static int      my_open(struct inode *inode, struct file *file);
-static int      my_release(struct inode *inode, struct file *file);
-static ssize_t  my_read(struct file *filp, char __user *Ubuffer, size_t count,loff_t * off);
-static ssize_t  my_write(struct file *filp, const char *Ubuffer, size_t count, loff_t * off);
-static long     my_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
 
-/*
-** File operation sturcture
-*/
-static struct file_operations fops =
+//protocol
+int NEW_open(struct inode *inode,struct file *filp);
+ssize_t NEW_read(struct file *filp,char __user *ubuff,size_t count,loff_t *offp);
+ssize_t NEW_write(struct file *filp, const char __user *ubuff,size_t count,loff_t *offp);
+int NEW_release(struct inode *inode,struct file *filp);
+long NEW_ioctl(struct file *filp,unsigned int cmd,unsigned long arg);
+
+struct file_operations fops=
 {
-        .owner          = THIS_MODULE,
-        .read           = my_read,
-        .write          = my_write,
-        .open           = my_open,
-        .unlocked_ioctl = my_ioctl,
-        .release        = my_release,
+    .open  =NEW_open,
+    .read  =NEW_read,
+    .write =NEW_write,
+    .release=NEW_release,
+    .unlocked_ioctl=NEW_ioctl,
 };
 
-/*
-** This function will be called when we open the Device file
-*/
-static int my_open(struct inode *inode, struct file *file)
+
+ dev_t MYDEV;
+static int __init prog_init(void)
 {
-        pr_info("Inside Open...!!!\n");
-        return 0;
+    int result;
+    int MAJOR,MINOR;
+   
+    MYDEV=MKDEV(6,0);
+    MAJOR=MAJOR(MYDEV);
+    MINOR=MINOR(MYDEV);
+    printk(KERN_INFO "\n THE MAJOR NUMBER %d.. THE MINOR NUMBER %d..\n",MAJOR,MINOR);
+    result=register_chrdev_region(MYDEV,1,"IOCTL_0");
+    if(result<0)
+    {
+        printk(KERN_INFO "\n THE DEVICE NUMBER IS NOT REGISTERED..\n");
+        return(-1);
+    }
+    my_cdev=cdev_alloc();
+    my_cdev->ops=&fops;
+
+    result=cdev_add(my_cdev,MYDEV,1);
+    if(result<0)
+    {
+        printk(KERN_INFO "\n THE DEVICE NUMBER AND CDEV NOT CONNECTED.\n");
+        unregister_chrdev_region(MYDEV,1);
+        return(-1);
+    }
+    return 0;
+    
+}
+static void __exit prog_exit(void)
+{
+    cdev_del(my_cdev);
+    unregister_chrdev_region(MYDEV,1);
+    
+    printk(KERN_INFO "\n I HAVE REMOVED ALL THE INIT....\n");
+}
+module_init(prog_init);
+module_exit(prog_exit);
+//function definition
+
+int NEW_open(struct inode *inode,struct file *filp)
+{
+    printk(KERN_ALERT "\n THE OPEN SYSTEM CALL IS CALLED...\n");
+    return 0;
 }
 
-/*
-** This function will be called when we close the Device file
-*/
-static int my_release(struct inode *inode, struct file *file)
-{
-        pr_info("Device File Closed...!!!\n");
-        return 0;
-}
-
-/*
-** This function will be called when we read the Device file
-*/
-static ssize_t my_read(struct file *filp, char __user *Ubuffer, size_t count, loff_t *off)
+ssize_t NEW_read(struct file *filp,char __user *ubuff,size_t count,loff_t *offp)
 {
     unsigned long result;
-ssize_t retval;
-        pr_info("Read Function\n");
-        result = copy_to_user((char *)Ubuffer, (char *)buff_init.buff,sizeof(buff_init.buff));
-         buff_init.size = count;
-        buff_init.r_w = 0;
-        if(result==0)
+    ssize_t retval;
+    result=copy_to_user((char*)ubuff,(char *)data.buff,sizeof(data.buff));
+    data.size = count;
+    data.r_w = 0;
+    if(result==0)
     {
-            printk(KERN_ALERT "\n DATA READED  from the kernal and provided to user SUCESSFULLY!! \n");
-            retval=count;
-            return retval;
+        printk(KERN_INFO  "\n DATA SEND COMPLETED..\n");
+        retval=count;
+        return retval;
     }
     else if(result>0)
-    {
-         printk(KERN_ALERT "\n Part Data!! \n");
-            retval=count-result;
-            return retval;
+    {  
+        printk(KERN_ALERT "\n THE PART OF DATA IS SENDED..\n ");
+        retval=(count-result);
+        return retval;
     }
     else
     {
-        printk(KERN_ALERT "\n Error DATA!! \n");
-            retval=-EFAULT;
-            return retval;
+        printk(KERN_ALERT "\n ERROR IN READING");
+        retval=-EFAULT;
+        return retval;
     }
 }
 
-/*
-** This function will be called when we write the Device file
-*/
-static ssize_t my_write(struct file *filp, const char *Ubuffer, size_t count, loff_t *off)
+ssize_t NEW_write(struct file *filp,const char __user *ubuff,size_t count,loff_t *offp)
 {
-        pr_info("Write function\n");
-        ret = copy_from_user((char *)buff_init.buff, (char *)Ubuffer, count);
-        buff_init.size = count;
-        buff_init.r_w = 1 ;
-        printk("Buffer Updated:%s \n",buff_init.buff);
-        printk("Size Updated:%d \n",buff_init.size);
-        printk("Status of r_w Updated:%d \n",buff_init.r_w);
-        return count;
+    unsigned long result;
+    ssize_t retval;
+    data.r_w = 1;
+    result=copy_from_user((char *)data.buff,(char *)ubuff,count);
+    data.size = count;
+    if(result==0)
+    {
+        printk(KERN_INFO  "\n DATA RECEIVED COMPLETED..\n");
+        retval=count;
+        return retval;
+    }
+    else if(result>0)
+    {  
+        printk(KERN_ALERT "\n MESSAGE FROM USER..\n...%s....\n",ubuff);
+        printk(KERN_ALERT "\n THE PART OF DATA IS RECEIVED..\n ");
+        retval=(count-result);
+        return retval;
+    }
+    else
+    {
+        printk(KERN_ALERT "\n ERROR IN WRITING");
+        retval=-EFAULT;
+        return retval;
+    }
+}
+int NEW_release(struct inode *inode,struct file *filp)
+{
+    printk(KERN_ALERT "\n THE CLOSE SYSTEM CALL IS CALLED...\n");
+    return 0;
 }
 
-/*
-** This function will be called when we write IOCTL on the Device file
-*/
-static long my_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+long NEW_ioctl(struct file *filp,unsigned int cmd,unsigned long arg)
 {
-        
-         switch(cmd) {
-                case GETSTAT:
-                        printk("r_w is %d\n",buff_init.r_w);
-                        if( copy_to_user((struct stats *)arg,&buff_init, sizeof(buff_init)))
+
+    printk("\n IOCTLFUNCTION");
+    switch(cmd)
+    {
+
+        case GETSTATS:
+                        printk("r_w is %d\n",data.r_w);
+                        if( copy_to_user((struct stats *)arg,&data, sizeof(data)))
                         {
                             pr_err("Data Read : Err!\n");
                         }
                         break;
-                default:
+        default:
                         pr_info("Default\n");
                         break;
-        }
-        return 0;
+        
+    }
+    return 0;
 }
- 
-/*
-** Module Init function
-*/
-static int __init mydriver_init(void)
-{
-        //Allocating Major number
-        if((alloc_chrdev_region(&dev, 0, 1, "myexam")) <0){
-            pr_err("Cannot allocate major number\n");
-            return -1;
-        }
-        pr_info("Major = %d Minor = %d \n",MAJOR(dev), MINOR(dev));
- 
-        //Creating cdev structure/
-        cdev_init(&mycdev,&fops);
- 
-        //Adding character device to the system/
-        if((cdev_add(&mycdev,dev,1)) < 0){
-            pr_err("Cannot add the device to the system\n");
-            goto r_class;
-        }
- 
-        //Creating struct class/
-        if((dev_class = class_create(THIS_MODULE,"exam_class")) == NULL){
-            pr_err("Cannot create the struct class\n");
-            goto r_class;
-        }
- 
-        //Creating device/
-        if((device_create(dev_class,NULL,dev,NULL,"myexam")) == NULL){
-            pr_err("Cannot create the Device 1\n");
-            goto r_device;
-        }
-        if(buff_init.buff[0] == '\0')
-        {
-        printk("Buffer is currently empty!");
-        }
-        pr_info("Device Driver Insert...Done!!!\n");
-        return 0;
- 
-r_device:
-        class_destroy(dev_class);
-r_class:
-        unregister_chrdev_region(dev,1);
-        return -1;
-}
-
-/*
-** Module exit function
-*/
-static void __exit mydriver_exit(void)
-{
-        device_destroy(dev_class,dev);
-        class_destroy(dev_class);
-        cdev_del(&mycdev);
-        unregister_chrdev_region(dev, 1);
-        pr_info("Device Driver Remove...Done!!!\n");
-}
- 
-module_init(mydriver_init);
-module_exit(mydriver_exit);
- 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Ashutosh KUmar");
-MODULE_DESCRIPTION("Question1");

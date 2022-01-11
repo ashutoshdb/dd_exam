@@ -6,10 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include<sys/ioctl.h>
-
-
-//IOCTL format MACRO 
-#define GETSTAT _IOWR('r','a',struct stats *)
+#include "control.h"
 struct stats
 {
    int size;
@@ -27,15 +24,15 @@ int main()
         printf("Welcome to User IOCTL program \n");
  
         printf("\nOpening Driver\n");
-        fd = open("/dev/myexam", O_RDWR);
-        if(fd < 0) 
-        {
-                printf("Cannot open device file...\n");
-                return 0;
-        }
+         fd=open("/dev/IOCTL_0",O_RDWR,0777);
+    if(fd<0)
+    {
+        printf("\n ERROR IN OPENING.\n");
+        exit(1);
+    }
  
         printf("Reading Value from Structure\n");
-        ioctl(fd, GETSTAT, (struct stats *)&buff_rec);
+        ioctl(fd, GETSTATS, (struct stats *)&buff_rec);
 
         printf("Size of buffer is %d\n", buff_rec.size);
         printf("Buffer Value is %s\n", buff_rec.buff);
